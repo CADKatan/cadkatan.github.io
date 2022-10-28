@@ -31,14 +31,23 @@
 			return;
 		}
 		await sleep(300);
-		containerElement.innerHTML = parts.map(({ image, amount = 1 }) => {
-			return `
+		containerElement.innerHTML = parts
+			.map((entry) => {
+				if (entry && "object" === typeof entry && "image" in entry) {
+					return entry;
+				}
+				return {
+					image: entry,
+				};
+			})
+			.map(({ image, amount = 1 }) => {
+				return `
 			<div>
 				<img src=${image} />
 				<span>x${amount}</span>
 			</div>
 			`;
-		}).join("");
+			}).join("");
 		containerElement.classList.remove("close");
 	}
 
