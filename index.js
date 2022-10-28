@@ -1,4 +1,6 @@
 (() => {
+	function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
+
 	function getUrlParam({ url, key }) {
 		const params = new URLSearchParams(new URL(url).search);
 		return params.get(key);
@@ -23,11 +25,35 @@
 		timeoutsArray.push(setTimeout(() => videoElement.pause(), (end - start) * 1000));
 	}
 
+	async function displayParts({ parts, containerElement }) {
+		containerElement.classList.add("close");
+		if (!parts || 0 === parts.length) {
+			return;
+		}
+		await sleep(300);
+		containerElement.innerHTML = parts.map(({ image, amount = 1 }) => {
+			return `
+			<div>
+				<img src=${image} />
+				<span>x${amount}</span>
+			</div>
+			`;
+		}).join("");
+		containerElement.classList.remove("close");
+	}
+
 	async function loadVideoData({ url }) {
-		const repoName = getUrlParam({ url, key: "repo" });
-		const videoData = await fetch(`https://raw.githubusercontent.com/CADKatan/${repoName}/main/assemblyInfo.json?cachebusting=${Math.random()}`,{
-			cache: "no-cache",
-		}).then(r => r.json());
+		const repoName = getUrlParam({ url, key: "project" });
+		const videoData = await fetch(`https://raw.githubusercontent.com/CADKatan/${repoName}/main/assemblyInfo.json?cachebusting=${Math.random()}`).then(r => r.json());
+		videoData.timestamps[0].parts = [
+			{
+				image: "https://raw.githubusercontent.com/CADKatan/helicopter/main/parts/rotorcap.svg",
+			},
+			{
+				image: "https://raw.githubusercontent.com/CADKatan/helicopter/main/parts/screw.svg",
+				amount: 2,
+			}
+		]
 		return videoData;
 	}
 
@@ -37,6 +63,7 @@
 		const introCover = document.getElementById("introCover");
 		const totalStepsSpan = document.getElementById("totalSteps");
 		const currentStepSpan = document.getElementById("currentStep");
+		const partsLegend = document.getElementById("partsLegend");
 		const introBtn = document.getElementById("introBtn");
 		const introBtnText = introBtn.querySelector("span");
 		const errorDetails = document.getElementById("errorDetails");
@@ -63,6 +90,7 @@
 		}
 		const playCurrentStep = () => {
 			setStepCounter();
+			displayParts({ parts: videoData.timestamps[currentStep].parts || [], containerElement: partsLegend })
 			playStep({
 				index: currentStep,
 				videoElement: video,
