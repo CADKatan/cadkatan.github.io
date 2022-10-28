@@ -25,7 +25,7 @@
 
 	async function loadVideoData({ url }) {
 		const repoName = getUrlParam({ url, key: "repo" });
-		const videoData = await fetch(`https://raw.githubusercontent.com/CADKatan/${repoName}/main/assemblyInfo.json`,{
+		const videoData = await fetch(`https://raw.githubusercontent.com/CADKatan/${repoName}/main/assemblyInfo.json?cachebusting=${Math.random()}`,{
 			cache: "no-cache",
 		}).then(r => r.json());
 		return videoData;
