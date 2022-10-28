@@ -1,1 +1,174 @@
-Hello CADKatan
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://code.iconify.design/iconify-icon/1.0.1/iconify-icon.min.js"></script>
+	<script src="index.js"></script>
+	<style>
+		* {
+			font-family: monospace;
+		}
+
+		.mainContainer {
+			display: flex;
+			flex-direction: column;
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			background: #efefef;
+		}
+
+		.buttons {
+			height: 64px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding-bottom: 16px;
+		}
+
+		.buttons button,
+		.introCover button {
+			padding: 8 32;
+			border: none;
+			border-radius: 64px;
+			background: white;
+			box-shadow: rgb(0 0 0 / 10%) 0px 4px 7px;
+		}
+
+		.buttons button[disabled],
+		.introCover button[disabled] {
+			opacity: 0.25;
+		}
+
+		.introCover button[disabled] {
+			background-color: rgb(131, 131, 131);
+		}
+
+		.buttons button>iconify-icon {
+			color: #686868
+		}
+
+		.buttons button:not(:last-child) {
+			margin-right: 16px;
+		}
+
+		.introCover button {
+			color: white;
+			background-color: rgb(47, 47, 180);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-shadow: rgb(0 0 0 / 20%) 0px 4px 7px;
+			font-size: 18px;
+			transition: all 0.5s ease-in-out;
+		}
+
+		.introCover.loadError button {
+			background-color: rgb(161, 43, 43);
+		}
+
+		.introCover button>iconify-icon {
+			margin-right: 16px;
+
+		}
+
+		.introCover {
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			background: white;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			opacity: 1;
+			transition: all 0.5s ease-in-out;
+			flex-direction: column;
+		}
+
+		.introCover .errorDetails {
+			display: none;
+			white-space: pre;
+			margin-top: 16px;
+		}
+		.introCover.loadError .errorDetails {
+			display: block;
+		}
+
+
+		.videoContainer {
+			flex-grow: 1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 16px 32px;
+		}
+
+		.videoFrame {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			box-shadow: rgb(0 0 0 / 50%) 0px 1px 25px;
+			border-radius: 10px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+			background: white;
+		}
+
+		.videoFrame>video {
+			position: absolute;
+		}
+
+
+		.stepCounter {
+			position: absolute;
+			top: 0;
+			right: 0;
+			margin-right: 16px;
+			margin-top: 16px;
+			background: rgba(0, 0, 0, 0.1);
+			padding: 16px;
+			border-radius: 8px;
+			font-size: 18px;
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="mainContainer">
+		<div class="videoContainer">
+			<div class="videoFrame">
+				<video playsinline preload=metadata id="video"></video>
+				<div class="stepCounter">
+					<span id="currentStep"></span>/<span id="totalSteps"></span>
+				</div>
+			</div>
+		</div>
+		<div class="buttons">
+			<button id="prevBtn">
+				<iconify-icon icon="mdi:arrow-left" width="32" height="32"></iconify-icon>
+			</button>
+			<button id="replayBtn">
+				<iconify-icon icon="mdi:replay" width="32" height="32"></iconify-icon>
+			</button>
+			<button id="nextBtn">
+				<iconify-icon icon="mdi:arrow-right" width="32" height="32"></iconify-icon>
+			</button>
+		</div>
+	</div>
+	<div class="introCover" id="introCover">
+		<button id="introBtn" disabled>
+			<iconify-icon icon="mdi:robot-happy-outline" width="48" height="48"></iconify-icon>
+			<span>Loading...</span>
+		</button>
+		<div class="errorDetails" id="errorDetails"></div>
+	</div>
+</body>
+
+</html>
