@@ -45,15 +45,6 @@
 	async function loadVideoData({ url }) {
 		const repoName = getUrlParam({ url, key: "project" });
 		const videoData = await fetch(`https://raw.githubusercontent.com/CADKatan/${repoName}/main/assemblyInfo.json?cachebusting=${Math.random()}`).then(r => r.json());
-		videoData.timestamps[0].parts = [
-			{
-				image: "https://raw.githubusercontent.com/CADKatan/helicopter/main/parts/rotorcap.svg",
-			},
-			{
-				image: "https://raw.githubusercontent.com/CADKatan/helicopter/main/parts/screw.svg",
-				amount: 2,
-			}
-		]
 		return videoData;
 	}
 
